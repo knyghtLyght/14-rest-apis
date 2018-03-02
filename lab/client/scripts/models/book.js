@@ -16,7 +16,7 @@ var __API_URL__ = 'http://localhost:3000';
   Book.prototype.toHtml = function() {
     let template = Handlebars.compile($('#book-list-template').text());
     return template(this);
-  }
+  };
 
   Book.all = [];
   
@@ -39,34 +39,36 @@ var __API_URL__ = 'http://localhost:3000';
       .catch(errorCallback);
 
   Book.update = (book, bookId) =>
-      $.ajax({
-        url: `${__API_URL__}/api/v1/books/${bookId}`,
-        method: 'PUT',
-        data: book,
-      })
+    $.ajax({
+      url: `${__API_URL__}/api/v1/books/${bookId}`,
+      method: 'PUT',
+      data: book,
+    })
       .then(() => page(`/books/${bookId}`))
-      .catch(errorCallback)
+      .catch(errorCallback);
 
   Book.destroy = id =>
     $.ajax({
       url: `${__API_URL__}/api/v1/books/${id}`,
       method: 'DELETE',
     })
-    .then(() => page('/'))
-    .catch(errorCallback)
+      .then(() => page('/'))
+      .catch(errorCallback);
 
   // COMMENT: Where is this method invoked? What is passed in as the 'book' argument when invoked? What callback will be invoked after Book.loadAll is invoked?
+  //This mehtoud is invoked in book-view.js when the search form submit event happens. the book argument is an object literal that contains the serch string peramiters. bookView.initSearchResultsPage is the callback.
   Book.find = (book, callback) =>
     $.get(`${__API_URL__}/api/v1/books/find`, book)
       .then(Book.loadAll)
       .then(callback)
-      .catch(errorCallback)
+      .catch(errorCallback);
 
   // COMMENT: Where is this method invoked? How does it differ from the Book.find method, above?
+  // Using the contextual paramiter of isbn we are now looking for one matching book instead of a list.
   Book.findOne = isbn =>
     $.get(`${__API_URL__}/api/v1/books/find/${isbn}`)
-    .then(Book.create)
-    .catch(errorCallback)
+      .then(Book.create)
+      .catch(errorCallback);
 
   module.Book = Book;
 })(app)
