@@ -14,20 +14,21 @@ var app = app || {};
       let token = event.target.passphrase.value;
 
       // COMMENT: Is the token cleared out of local storage? Do you agree or disagree with this structure?
+      // No the token is not. The most secure practice is to remove it so I disagree but if we did create a logout function that would be a part of it. One of the points of superagent was to hide the token from being seen. 
       $.get(`${__API_URL__}/api/v1/admin`, {token})
         .then(res => {
           localStorage.token = true;
           page('/');
         })
         .catch(() => page('/'));
-    })
+    });
   };
 
   adminView.verify = function(ctx, next) {
     if(!localStorage.token) $('.admin').addClass('admin-only');
     else $('.admin').show();
     next();
-  }
+  };
 
   module.adminView = adminView;
-})(app)
+})(app);
